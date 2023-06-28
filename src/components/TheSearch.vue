@@ -22,7 +22,7 @@ export default {
     height: 30px;
     border: none;
     width: 400px;
-    margin-bottom: 50px;
+    margin-bottom: 30px;
     text-indent: 5px;
     color: #2a2a2a;
     background-color: #F2F2F2;

@@ -1,37 +1,49 @@
 <template>
-  <table class="table">
-    <thead>
-    <tr>
-      <th class="table__th">Full Name</th>
-      <th class="table__th">Action</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr v-for="row in currentTransactions" :key="row.id">
-      <td class="table__td">{{ row.firstName }} {{ row.lastName }}</td>
-      <td />
-    </tr>
-    <tr>
-      <td>
-        {{ currentPage }} of {{ numberOfPages }}
-      </td>
-      <td>
-        <button
-            @click="handlePrevPage"
-            :disabled="currentPage === 1"
-        >
-          {{ "<" }}
-        </button>
-        <button
-            @click="handleNextPage"
-            :disabled="currentPage === numberOfPages"
-        >
-          {{ ">" }}
-        </button>
-      </td>
-    </tr>
-    </tbody>
-  </table>
+  <div class="the-table">
+    <div class="the-table__wrapper">
+      <table class="the-table__table">
+        <thead>
+        <tr>
+          <th class="the-table__avatar" />
+          <th class="the-table__th">Full Name</th>
+          <th class="the-table__th">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="row in currentTransactions" :key="row.id">
+          <td />
+          <td class="the-table__td">{{ row.firstName }} {{ row.lastName }}</td>
+          <td />
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="the-table__pagination">
+      <button
+        @click="handlePrevPage"
+        :disabled="currentPage === 1"
+        class="the-table__pagination-button"
+      >
+        {{ "<<" }}
+      </button>
+      <button
+        v-for="page in numberOfPages"
+        :key="page"
+        class="the-table__pagination-button"
+        :class="{'the-table__button-active': currentPage === page}"
+        @click="currentPage = page"
+      >
+        {{ page }}
+      </button>
+      <button
+        @click="handleNextPage"
+        :disabled="currentPage === numberOfPages"
+        class="the-table__pagination-button"
+      >
+        {{ ">>" }}
+      </button>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -45,7 +57,7 @@ export default {
   },
   data: () => ({
     currentPage: 1,
-    transactionsPerPage: 6,
+    transactionsPerPage: 10,
   }),
   methods: {
     handleNextPage() {
@@ -73,9 +85,19 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.table {
-  width: 100%;
-  border-spacing: 0;
+.the-table {
+  border-top: 1px solid #f5f5f5;
+
+  &__wrapper {
+    margin-bottom: 30px;
+    height: 660px;
+  }
+
+  &__table {
+    width: 100%;
+    height: 200px;
+    border-spacing: 0;
+  }
 
   &__td {
     text-align: left;
@@ -88,23 +110,41 @@ export default {
   }
 
   tr {
-    height: 50px;
+    text-align: left;
+    height: 60px;
   }
 
-  tr:nth-child(odd) {
+  tr:nth-child(even) {
     background-color: #F2F2F2
   }
 
-  button {
-    border: none;
+  &__avatar {
+    width: 5%;
+  }
+
+  &__pagination {
+    display: flex;
+    width: min-content;
+    border-radius: 5px;
+  }
+
+  &__pagination-button {
+    padding: 0;
+    height: 30px;
+    width: 30px;
     cursor: pointer;
     font-size: 15px;
-    margin-right: 5px;
+    background-color: white;
+    border: 1px solid #ddd;
 
     &:disabled {
-      color: grey;
       cursor: default;
     }
+  }
+
+  &__button-active {
+    background-color: green;
+    color: white;
   }
 }
 </style>
