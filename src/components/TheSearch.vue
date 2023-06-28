@@ -21,8 +21,7 @@ export default {
   .the-search {
     height: 30px;
     border: none;
-    width: 400px;
-    margin-bottom: 30px;
+    width: 350px;
     text-indent: 5px;
     color: #2a2a2a;
     background-color: #F2F2F2;

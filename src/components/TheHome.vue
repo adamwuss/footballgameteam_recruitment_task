@@ -1,18 +1,23 @@
 <template>
  <div class="the-home">
-   <TheSearch @search="handleSearch" />
+   <div class="the-home__top">
+     <TheSearch @search="handleSearch" />
+     <TheButton />
+   </div>
    <TheTable :interns="filteredInterns" />
  </div>
 </template>
 
 <script>
 import TheTable from '@/components/TheTable.vue'
-import TheSearch from "@/components/TheSearch.vue";
+import TheSearch from '@/components/TheSearch.vue';
+import TheButton from '@/components/TheButton.vue';
 export default {
   name: 'TheHome',
   components: {
     TheTable,
     TheSearch,
+    TheButton,
   },
   data: () => ({
     interns: [
@@ -111,5 +116,12 @@ export default {
 <style scoped lang="scss">
 .the-home {
   padding: 20px;
+
+  &__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+  }
 }
 </style>
