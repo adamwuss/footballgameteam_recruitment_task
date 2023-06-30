@@ -10,9 +10,9 @@
         </tr>
         </thead>
         <tbody>
-        <tr v-for="row in currentTransactions" :key="row.id">
+        <tr v-for="row in interns" :key="row.id">
           <td />
-          <td class="the-table__td">{{ row.firstName }} {{ row.lastName }}</td>
+          <td class="the-table__td">{{ row.first_name }} {{ row.last_name }}</td>
           <td />
         </tr>
         </tbody>
@@ -20,7 +20,7 @@
     </div>
     <div class="the-table__pagination">
       <button
-        @click="handlePrevPage"
+        @click="handleClick(null, 'prev')"
         :disabled="currentPage === 1"
         class="the-table__pagination-button"
       >
@@ -31,12 +31,12 @@
         :key="page"
         class="the-table__pagination-button"
         :class="{'the-table__button-active': currentPage === page}"
-        @click="currentPage = page"
+        @click="handleClick(page)"
       >
         {{ page }}
       </button>
       <button
-        @click="handleNextPage"
+        @click="handleClick(null, 'next')"
         :disabled="currentPage === numberOfPages"
         class="the-table__pagination-button"
       >
@@ -54,10 +54,17 @@ export default {
       type: Array,
       required: true,
     },
+    numberOfPages: {
+      type: Number,
+      required: true,
+    },
+    callbackClick: {
+      type: Function,
+      required: true,
+    },
   },
   data: () => ({
     currentPage: 1,
-    transactionsPerPage: 10,
   }),
   methods: {
     handleNextPage() {
@@ -66,21 +73,18 @@ export default {
     handlePrevPage() {
       this.currentPage -= 1
     },
+    handleClick(page, direction) {
+      if (direction === 'next') {
+        this.handleNextPage()
+      } else if (direction === 'prev') {
+        this.handlePrevPage()
+      } else {
+        this.currentPage = page
+      }
+
+      this.callbackClick(this.currentPage)
+    },
   },
-  computed: {
-    indexOfLastTransaction() {
-      return this.currentPage * this.transactionsPerPage
-    },
-    indexOfFirstTransaction() {
-      return this.indexOfLastTransaction - this.transactionsPerPage;
-    },
-    currentTransactions() {
-      return [...this.interns].slice(this.indexOfFirstTransaction, this.indexOfLastTransaction);
-    },
-    numberOfPages() {
-      return Math.ceil(this.interns.length / this.transactionsPerPage);
-    },
-  }
 }
 </script>
 
