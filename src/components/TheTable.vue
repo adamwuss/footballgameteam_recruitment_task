@@ -1,22 +1,26 @@
 <template>
   <div class="the-table">
     <div class="the-table__wrapper">
-      <table class="the-table__table">
+      <table class="the-table__table" v-if="!isLoading">
         <thead>
         <tr>
           <th class="the-table__avatar" />
-          <th class="the-table__th">Full Name</th>
-          <th class="the-table__th">Action</th>
+          <th class="the-table__name">Full Name</th>
+          <th class="the-table__action">Action</th>
         </tr>
         </thead>
         <tbody>
         <tr v-for="row in interns" :key="row.id">
           <td />
-          <td class="the-table__td">{{ row.first_name }} {{ row.last_name }}</td>
-          <td />
+          <td class="the-table__name">{{ row.first_name }} {{ row.last_name }}</td>
+          <td class="the-table__action">
+            <TheEdit />
+            <TheDelete />
+          </td>
         </tr>
         </tbody>
       </table>
+      <TheSpinner v-else />
     </div>
     <div class="the-table__pagination">
       <button
@@ -47,8 +51,16 @@
 </template>
 
 <script>
+import TheEdit from '@/components/icons/TheEdit.vue';
+import TheDelete from '@/components/icons/TheDelete.vue';
+import TheSpinner from '@/components/TheSpinner.vue';
 export default {
   name: "TheTable",
+  components: {
+    TheEdit,
+    TheDelete,
+    TheSpinner
+  },
   props: {
     interns: {
       type: Array,
@@ -65,15 +77,17 @@ export default {
   },
   data: () => ({
     currentPage: 1,
+    isLoading: false,
   }),
   methods: {
     handleNextPage() {
-      this.currentPage += 1
+      this.currentPage += 1;
     },
     handlePrevPage() {
-      this.currentPage -= 1
+      this.currentPage -= 1;
     },
-    handleClick(page, direction) {
+    async handleClick(page, direction) {
+      this.isLoading = true
       if (direction === 'next') {
         this.handleNextPage()
       } else if (direction === 'prev') {
@@ -82,7 +96,8 @@ export default {
         this.currentPage = page
       }
 
-      this.callbackClick(this.currentPage)
+      await this.callbackClick(this.currentPage)
+      this.isLoading = false
     },
   },
 }
@@ -90,27 +105,38 @@ export default {
 
 <style scoped lang="scss">
 .the-table {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   border-top: 1px solid #f5f5f5;
 
   &__wrapper {
     margin-bottom: 30px;
-    height: 660px;
+    height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   &__table {
     width: 100%;
-    height: 200px;
     border-spacing: 0;
   }
 
-  &__td {
+  &__name {
     text-align: left;
     padding: 16px;
   }
 
-  &__th {
-    text-align: left;
-    padding: 16px;
+  &__action {
+    text-align: right;
+    padding-right: 30px;
+    fill: grey;
+
+    svg {
+      margin-right: 10px;
+      width: 20px;
+    }
   }
 
   tr {
