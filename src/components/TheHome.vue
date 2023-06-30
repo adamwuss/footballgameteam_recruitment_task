@@ -1,13 +1,14 @@
 <template>
  <div class="the-home">
-   <div class="the-home__top">
+   <div class="the-home__header">
      <TheSearch @search="handleSearch" />
-     <TheButton />
+     <TheButton @click="handleIntern" />
    </div>
    <TheTable
      :interns="filteredInterns"
      :numberOfPages="numberOfPages"
      :callbackClick="callbackClick"
+     :isLoading="isLoading"
    />
  </div>
 </template>
@@ -28,25 +29,30 @@ export default {
     interns: [],
     numberOfPages: 1,
     search: '',
+    isLoading: false,
   }),
   async mounted() {
-    const data = await getInterns()
-    this.interns = data.data;
-    this.numberOfPages = data.total_pages;
+    await this.callbackClick();
   },
   methods: {
     handleSearch(search) {
       this.search = search;
     },
     async callbackClick(page) {
+      this.isLoading = true;
+
       const data = await getInterns(page)
       this.interns = data.data;
       this.numberOfPages = data.total_pages;
-    }
+
+      this.isLoading = false;
+    },
+    handleIntern() {},
   },
   computed: {
     filteredInterns() {
-      return this.interns.filter(intern => `${intern.first_name} ${intern.last_name}`.toLowerCase().includes(this.search.toLowerCase()));
+      return this.interns.filter(intern => `${intern.first_name} ${intern.last_name}`
+        .toLowerCase().includes(this.search.toLowerCase()));
     },
   },
 }
@@ -56,7 +62,7 @@ export default {
 .the-home {
   padding: 20px;
 
-  &__top {
+  &__header {
     display: flex;
     justify-content: space-between;
     align-items: center;

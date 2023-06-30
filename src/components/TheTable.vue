@@ -79,30 +79,25 @@ export default {
       type: Function,
       required: true,
     },
+    isLoading: {
+      type: Boolean,
+      required: true,
+    },
   },
   data: () => ({
     currentPage: 1,
-    isLoading: false,
   }),
   methods: {
-    handleNextPage() {
-      this.currentPage += 1;
-    },
-    handlePrevPage() {
-      this.currentPage -= 1;
-    },
     async handleClick(page, direction) {
-      this.isLoading = true
       if (direction === 'next') {
-        this.handleNextPage()
+        this.currentPage += 1;
       } else if (direction === 'prev') {
-        this.handlePrevPage()
+        this.currentPage -= 1;
       } else {
         this.currentPage = page
       }
 
       await this.callbackClick(this.currentPage)
-      this.isLoading = false
     },
   },
 }
