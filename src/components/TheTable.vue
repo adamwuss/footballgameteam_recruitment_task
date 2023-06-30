@@ -1,6 +1,9 @@
 <template>
   <div class="the-table">
-    <div class="the-table__wrapper">
+    <div
+      class="the-table__wrapper"
+      :class="{'the-table__center-flex': isLoading}"
+    >
       <table class="the-table__table" v-if="!isLoading">
         <thead>
         <tr>
@@ -11,7 +14,9 @@
         </thead>
         <tbody>
         <tr v-for="row in interns" :key="row.id">
-          <td />
+          <td class="the-table__avatar">
+            <img :src="row.avatar" width="50" alt="avatar">
+          </td>
           <td class="the-table__name">{{ row.first_name }} {{ row.last_name }}</td>
           <td class="the-table__action">
             <TheEdit />
@@ -113,9 +118,6 @@ export default {
   &__wrapper {
     margin-bottom: 30px;
     height: 400px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
   }
 
   &__table {
@@ -128,6 +130,11 @@ export default {
     padding: 16px;
   }
 
+  &__avatar img {
+    margin-left: 20px;
+    border-radius: 50%;
+  }
+
   &__action {
     text-align: right;
     padding-right: 30px;
@@ -137,6 +144,12 @@ export default {
       margin-right: 10px;
       width: 20px;
     }
+  }
+
+  &__center-flex {
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   tr {
