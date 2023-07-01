@@ -17,7 +17,7 @@
    </div>
    <TheIntern
      v-else
-     @close="isAddingIntern = false"
+     @close="handleAddIntern"
    />
  </div>
 </template>
@@ -41,6 +41,7 @@ export default {
   data: () => ({
     interns: {},
     numberOfPages: 1,
+    totalPages: null,
     perPage: 6,
     search: '',
     isLoading: false,
@@ -56,18 +57,29 @@ export default {
     async callbackClick(page) {
       this.isLoading = true;
 
-      if (Object.keys(this.interns).includes(String(page))) {
+      if (Object.keys(this.interns).includes(String(page)) || this.totalPages < page) {
         this.isLoading = false;
         return
       } else {
-        console.log("page", page)
         const data = await getInterns(page)
-        this.interns[data.page] = data.data;
-        this.numberOfPages = data.total_pages;
+        this.interns[data.page - 1] = data.data;
+        this.totalPages = data.total_pages;
+        this.numberOfPages = this.totalPages
         this.perPage = data.per_page;
       }
 
       this.isLoading = false;
+    },
+    handleAddIntern(intern) {
+      if (this.interns[Object.keys(this.interns).length - 1].length === this.perPage) {
+        this.numberOfPages += 1;
+        this.interns[this.numberOfPages - 1] = [];
+        this.interns[this.numberOfPages - 1].push(intern);
+      } else {
+        this.interns[this.numberOfPages -1].push(intern);
+      }
+
+      this.isAddingIntern = false;
     },
   },
   computed: {
@@ -94,6 +106,7 @@ export default {
   background: white;
   padding: 30px;
   border-radius: 10px;
+  box-shadow: 0 0 25px 0 lightgrey;
 
   &__header {
     display: flex;

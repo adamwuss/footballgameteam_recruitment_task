@@ -1,6 +1,6 @@
 <template>
   <button
-    class="the-button" @click="$emit('click')"
+    class="the-button"
     :class="{'the-button__rounded': rounded}"
   >
     <slot />

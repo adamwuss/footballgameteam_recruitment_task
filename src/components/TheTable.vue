@@ -13,9 +13,9 @@
         </tr>
         </thead>
         <tbody>
-        <tr v-for="row in interns[currentPage]" :key="row.id">
+        <tr v-for="row in interns[currentPage - 1]" :key="row.id">
           <td class="the-table__avatar">
-            <img :src="row.avatar" width="50" alt="avatar">
+            <img :src="row.avatar || row.local_image || require('../assets/img/default-user.png')" width="50" height="50" alt="avatar">
           </td>
           <td class="the-table__name">{{ row.first_name }} {{ row.last_name }}</td>
           <td class="the-table__action">
@@ -99,6 +99,10 @@ export default {
 
       await this.callbackClick(this.currentPage)
     },
+    async handleImage(file) {
+      console.log(file)
+      return window.URL.createObjectURL(file);
+    }
   },
 }
 </script>
@@ -123,11 +127,6 @@ export default {
   &__name {
     text-align: left;
     padding: 16px;
-  }
-
-  &__avatar img {
-    margin-left: 20px;
-    border-radius: 50%;
   }
 
   &__action {
@@ -158,6 +157,11 @@ export default {
 
   &__avatar {
     width: 5%;
+
+    img {
+      margin-left: 20px;
+      border-radius: 50%;
+    }
   }
 
   &__pagination {
