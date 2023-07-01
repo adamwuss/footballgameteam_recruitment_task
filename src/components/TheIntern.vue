@@ -100,6 +100,7 @@ export default {
         first_name: this.firstName,
         last_name: this.lastName,
         local_image: this.imageSrc,
+        id: Date.now(),
       });
     },
   },

@@ -13,14 +13,14 @@
         </tr>
         </thead>
         <tbody>
-        <tr v-for="row in interns[currentPage - 1]" :key="row.id">
+        <tr v-for="row in currentInterns" :key="row.id">
           <td class="the-table__avatar">
             <img :src="row.avatar || row.local_image || require('../assets/img/default-user.png')" width="50" height="50" alt="avatar">
           </td>
           <td class="the-table__name">{{ row.first_name }} {{ row.last_name }}</td>
           <td class="the-table__action">
             <TheEdit />
-            <TheDelete />
+            <TheDelete @click="$emit('delete', row.id)" />
           </td>
         </tr>
         </tbody>
@@ -29,7 +29,7 @@
     </div>
     <div class="the-table__pagination">
       <button
-        @click="handleClick(null, 'prev')"
+        @click="handlePrevPage"
         :disabled="currentPage === 1"
         class="the-table__pagination-button"
       >
@@ -40,12 +40,12 @@
         :key="page"
         class="the-table__pagination-button"
         :class="{'the-table__button-active': currentPage === page}"
-        @click="handleClick(page)"
+        @click="currentPage = page"
       >
         {{ page }}
       </button>
       <button
-        @click="handleClick(null, 'next')"
+        @click="handleNextPage"
         :disabled="currentPage === numberOfPages"
         class="the-table__pagination-button"
       >
@@ -71,14 +71,6 @@ export default {
       type: Object,
       required: true,
     },
-    numberOfPages: {
-      type: Number,
-      required: true,
-    },
-    callbackClick: {
-      type: Function,
-      required: true,
-    },
     isLoading: {
       type: Boolean,
       required: true,
@@ -86,24 +78,30 @@ export default {
   },
   data: () => ({
     currentPage: 1,
+    internsPerPage: 6,
   }),
   methods: {
-    async handleClick(page, direction) {
-      if (direction === 'next') {
-        this.currentPage += 1;
-      } else if (direction === 'prev') {
-        this.currentPage -= 1;
-      } else {
-        this.currentPage = page
-      }
-
-      await this.callbackClick(this.currentPage)
+    handleNextPage() {
+      this.currentPage += 1
     },
-    async handleImage(file) {
-      console.log(file)
-      return window.URL.createObjectURL(file);
-    }
+    handlePrevPage() {
+      this.currentPage -= 1
+    },
   },
+  computed: {
+    indexOfLastIntern() {
+      return this.currentPage * this.internsPerPage
+    },
+    indexOfFirstIntern() {
+      return this.indexOfLastIntern - this.internsPerPage;
+    },
+    currentInterns() {
+      return [...this.interns].slice(this.indexOfFirstIntern, this.indexOfLastIntern);
+    },
+    numberOfPages() {
+      return Math.ceil(this.interns.length / this.internsPerPage);
+    },
+  }
 }
 </script>
 
@@ -137,6 +135,7 @@ export default {
     svg {
       margin-right: 10px;
       width: 20px;
+      cursor: pointer;
     }
   }
 

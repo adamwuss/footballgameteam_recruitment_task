@@ -10,9 +10,8 @@
      </div>
      <TheTable
        :interns="filteredInterns"
-       :numberOfPages="numberOfPages"
-       :callbackClick="callbackClick"
        :isLoading="isLoading"
+       @delete="handleDelete"
      />
    </div>
    <TheIntern
@@ -39,48 +38,39 @@ export default {
     TheIntern,
   },
   data: () => ({
-    interns: {},
-    numberOfPages: 1,
-    totalPages: null,
-    perPage: 6,
+    interns: [],
     search: '',
     isLoading: false,
     isAddingIntern: false,
   }),
   async mounted() {
-    await this.callbackClick();
+    await this.loadData();
   },
   methods: {
     handleSearch(search) {
       this.search = search;
     },
-    async callbackClick(page) {
+    async loadData() {
       this.isLoading = true;
 
-      if (Object.keys(this.interns).includes(String(page)) || this.totalPages < page) {
-        this.isLoading = false;
-        return
-      } else {
-        const data = await getInterns(page)
-        this.interns[data.page - 1] = data.data;
-        this.totalPages = data.total_pages;
-        this.numberOfPages = this.totalPages
-        this.perPage = data.per_page;
+      const data = await getInterns()
+      this.interns = data.data;
+      this.totalPages = data.total_pages;
+
+      for (let i = 2; i <= this.totalPages; i++) {
+        const data = await getInterns(String(i));
+        this.interns = [...this.interns, ...data.data];
       }
 
       this.isLoading = false;
     },
     handleAddIntern(intern) {
-      if (this.interns[Object.keys(this.interns).length - 1].length === this.perPage) {
-        this.numberOfPages += 1;
-        this.interns[this.numberOfPages - 1] = [];
-        this.interns[this.numberOfPages - 1].push(intern);
-      } else {
-        this.interns[this.numberOfPages -1].push(intern);
-      }
-
-      this.isAddingIntern = false;
+     this.interns.push(intern);
+     this.isAddingIntern = false;
     },
+    handleDelete(id) {
+      this.interns = this.interns.filter(intern => intern.id !== id)
+    }
   },
   computed: {
     filteredInterns() {
@@ -88,14 +78,7 @@ export default {
         return this.interns;
       }
 
-      const deepCopy = JSON.parse(JSON.stringify(this.interns));
-
-      Object.keys(deepCopy).forEach(key => {
-        deepCopy[key] = this.interns[key].filter(intern => `${intern.first_name} ${intern.last_name}`
-          .toLowerCase().includes(this.search.toLowerCase()));
-      });
-
-      return deepCopy;
+      return this.interns.filter(intern => `${intern.first_name} ${intern.last_name}`.toLowerCase().includes(this.search.toLowerCase()));
     },
   },
 }
