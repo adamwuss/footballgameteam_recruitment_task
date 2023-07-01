@@ -19,8 +19,8 @@
           </td>
           <td class="the-table__name">{{ row.first_name }} {{ row.last_name }}</td>
           <td class="the-table__action">
-            <TheEdit />
-            <TheDelete @click="$emit('delete', row.id)" />
+            <TheEdit @click="$emit('edit', row.id)" />
+            <TheDelete @click="handleDelete(row.id)" />
           </td>
         </tr>
         </tbody>
@@ -87,6 +87,13 @@ export default {
     handlePrevPage() {
       this.currentPage -= 1
     },
+    handleDelete(id) {
+      if (this.interns.length % this.internsPerPage === 1) {
+        this.handlePrevPage();
+      }
+
+      this.$emit('delete', id)
+    }
   },
   computed: {
     indexOfLastIntern() {

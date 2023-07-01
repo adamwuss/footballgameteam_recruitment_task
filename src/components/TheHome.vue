@@ -1,9 +1,9 @@
 <template>
  <div class="the-home">
-   <div v-if="!isAddingIntern">
+   <div v-if="!isHandlingIntern">
      <div class="the-home__header">
        <TheSearch @search="handleSearch" />
-       <TheButton @click="isAddingIntern = true" rounded>
+       <TheButton @click="isHandlingIntern = true" rounded>
          <ThePlus />
          Add User
        </TheButton>
@@ -12,10 +12,12 @@
        :interns="filteredInterns"
        :isLoading="isLoading"
        @delete="handleDelete"
+       @edit="handleEdit"
      />
    </div>
    <TheIntern
      v-else
+     :editingIntern="editingIntern"
      @close="handleAddIntern"
    />
  </div>
@@ -26,8 +28,9 @@ import TheTable from '@/components/TheTable.vue'
 import TheSearch from '@/components/TheSearch.vue';
 import TheButton from '@/components/TheButton.vue';
 import TheIntern from "@/components/TheIntern.vue";
-import { getInterns } from '@/api/getInterns';
+import {getInterns} from '@/api/getInterns';
 import ThePlus from "@/components/icons/ThePlus.vue";
+
 export default {
   name: 'TheHome',
   components: {
@@ -41,7 +44,8 @@ export default {
     interns: [],
     search: '',
     isLoading: false,
-    isAddingIntern: false,
+    isHandlingIntern: false,
+    editingIntern: {},
   }),
   async mounted() {
     await this.loadData();
@@ -64,12 +68,25 @@ export default {
 
       this.isLoading = false;
     },
-    handleAddIntern(intern) {
-     this.interns.push(intern);
-     this.isAddingIntern = false;
+    handleAddIntern(newIntern) {
+      const intern = this.interns.find(user => user.id === newIntern.id)
+      if (intern) {
+        intern.first_name = newIntern.first_name;
+        intern.last_name = newIntern.last_name;
+        intern.avatar = newIntern.avatar;
+      } else {
+        this.interns.push(newIntern);
+      }
+
+     this.editingIntern = {};
+     this.isHandlingIntern = false;
     },
     handleDelete(id) {
       this.interns = this.interns.filter(intern => intern.id !== id)
+    },
+    handleEdit(id) {
+      this.editingIntern = this.interns.find(intern => intern.id === id) || {};
+      this.isHandlingIntern = true;
     }
   },
   computed: {

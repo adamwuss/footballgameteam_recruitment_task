@@ -15,12 +15,12 @@
       </div>
 
       <TheButton @click="handleClick">
-        Update Details
+        {{ editingIntern ? 'Update Details' : 'Add User' }}
       </TheButton>
     </div>
 
     <div class="the-intern__photo">
-      <img :src="imageSrc || require('../assets/img/default-user.png')" width="100" height="100" alt="user">
+      <img :src="local_image || avatar || require('../assets/img/default-user.png')" width="100" height="100" alt="user">
       <label class="the-intern__button">
         <input type="file" accept="image/*" @input="handleImage" />
         <TheCamera />
@@ -39,17 +39,26 @@ export default {
     TheButton,
     TheCamera,
   },
+  props: {
+    editingIntern: {
+      type: Object,
+      default: () => ({})
+    },
+  },
   data() {
     return {
-      firstName: "",
-      lastName: "",
+      firstName: this.editingIntern.first_name || '',
+      lastName: this.editingIntern.last_name || '',
       firstNameError: "",
       lastNameError: "",
-      imageSrc: null,
+      local_image: this.editingIntern.local_image || '',
+      avatar: this.editingIntern.avatar || '',
     };
   },
   methods: {
     validateFirstName() {
+      this.firstName.trim();
+
       if (!this.firstName) {
         this.firstNameError = "First Name is required";
       } else if (!/^[a-zA-Z]+$/.test(this.firstName)) {
@@ -59,6 +68,8 @@ export default {
       }
     },
     validateLastName() {
+      this.lastName.trim();
+
       if (!this.lastName) {
         this.lastNameError = "Last Name is required";
       } else if (!/^[a-zA-Z]+$/.test(this.lastName)) {
@@ -81,7 +92,7 @@ export default {
     loadImage(file) {
       const reader = new FileReader();
       reader.onload = (event) => {
-        this.imageSrc = event.target.result;
+        this.local_image = event.target.result;
       };
       reader.readAsDataURL(file);
     },
@@ -99,8 +110,9 @@ export default {
       this.$emit("close", {
         first_name: this.firstName,
         last_name: this.lastName,
-        local_image: this.imageSrc,
-        id: Date.now(),
+        avatar: this.local_image || this.editingIntern.avatar,
+        local_image: this.local_image || this.editingIntern.avatar,
+        id: this.editingIntern.id || Date.now(),
       });
     },
   },
@@ -159,6 +171,10 @@ export default {
     justify-content: space-between;
     width: 400px;
     padding: 20px;
+
+    img {
+      border-radius: 50%;
+    }
   }
 
   &__button {
