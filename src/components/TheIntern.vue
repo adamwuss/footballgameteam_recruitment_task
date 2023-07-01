@@ -57,8 +57,6 @@ export default {
   },
   methods: {
     validateFirstName() {
-      this.firstName.trim();
-
       if (!this.firstName) {
         this.firstNameError = "First Name is required";
       } else if (!/^[a-zA-Z]+$/.test(this.firstName)) {
@@ -68,8 +66,6 @@ export default {
       }
     },
     validateLastName() {
-      this.lastName.trim();
-
       if (!this.lastName) {
         this.lastNameError = "Last Name is required";
       } else if (!/^[a-zA-Z]+$/.test(this.lastName)) {
@@ -101,6 +97,9 @@ export default {
       this.validateLastName();
     },
     async handleClick() {
+      this.firstName = this.firstName.trim();
+      this.lastName = this.lastName.trim();
+
       this.validation()
 
       if (this.firstNameError || this.lastNameError) {
