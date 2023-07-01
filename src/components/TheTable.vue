@@ -13,7 +13,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr v-for="row in interns" :key="row.id">
+        <tr v-for="row in interns[currentPage]" :key="row.id">
           <td class="the-table__avatar">
             <img :src="row.avatar" width="50" alt="avatar">
           </td>
@@ -68,7 +68,7 @@ export default {
   },
   props: {
     interns: {
-      type: Array,
+      type: Object,
       required: true,
     },
     numberOfPages: {

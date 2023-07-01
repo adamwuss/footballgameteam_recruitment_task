@@ -3,11 +3,11 @@
     <div class="the-intern__inputs">
       <label class="the-intern__label">
         <span class="the-intern__text">First Name</span>
-        <input class="the-intern__input" type="text" />
+        <input class="the-intern__input" type="text"  v-model="firstName" />
       </label>
       <label class="the-intern__label">
         <span class="the-intern__text">Last Name</span>
-        <input class="the-intern__input" type="text" />
+        <input class="the-intern__input" type="text" v-model="lastName" />
       </label>
     </div>
 
@@ -24,8 +24,12 @@ export default {
   components: {
     TheButton,
   },
+  data: () => ({
+    firstName: "",
+    lastName: "",
+  }),
   methods: {
-    handleClick() {
+    async handleClick() {
       this.$emit("close");
     },
   },
@@ -38,7 +42,7 @@ export default {
   flex-direction: column;
   justify-content: space-between;
   height: 300px;
-  padding: 50px;
+  padding-top: 50px;
 
   &__inputs {
     display: flex;

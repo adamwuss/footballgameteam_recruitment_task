@@ -9,10 +9,10 @@
        </TheButton>
      </div>
      <TheTable
-         :interns="filteredInterns"
-         :numberOfPages="numberOfPages"
-         :callbackClick="callbackClick"
-         :isLoading="isLoading"
+       :interns="filteredInterns"
+       :numberOfPages="numberOfPages"
+       :callbackClick="callbackClick"
+       :isLoading="isLoading"
      />
    </div>
    <TheIntern
@@ -39,8 +39,9 @@ export default {
     TheIntern,
   },
   data: () => ({
-    interns: [],
+    interns: {},
     numberOfPages: 1,
+    perPage: 6,
     search: '',
     isLoading: false,
     isAddingIntern: false,
@@ -55,17 +56,34 @@ export default {
     async callbackClick(page) {
       this.isLoading = true;
 
-      const data = await getInterns(page)
-      this.interns = data.data;
-      this.numberOfPages = data.total_pages;
+      if (Object.keys(this.interns).includes(String(page))) {
+        this.isLoading = false;
+        return
+      } else {
+        console.log("page", page)
+        const data = await getInterns(page)
+        this.interns[data.page] = data.data;
+        this.numberOfPages = data.total_pages;
+        this.perPage = data.per_page;
+      }
 
       this.isLoading = false;
     },
   },
   computed: {
     filteredInterns() {
-      return this.interns.filter(intern => `${intern.first_name} ${intern.last_name}`
-        .toLowerCase().includes(this.search.toLowerCase()));
+      if (!this.search) {
+        return this.interns;
+      }
+
+      const deepCopy = JSON.parse(JSON.stringify(this.interns));
+
+      Object.keys(deepCopy).forEach(key => {
+        deepCopy[key] = this.interns[key].filter(intern => `${intern.first_name} ${intern.last_name}`
+          .toLowerCase().includes(this.search.toLowerCase()));
+      });
+
+      return deepCopy;
     },
   },
 }
