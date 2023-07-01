@@ -1,32 +1,41 @@
 <template>
-  <button class="the-button" @click="$emit('click')">
-    <ThePlus />
-    Add User
+  <button
+    class="the-button" @click="$emit('click')"
+    :class="{'the-button__rounded': rounded}"
+  >
+    <slot />
   </button>
 </template>
 
 <script>
-import ThePlus from "@/components/icons/ThePlus.vue";
 export default {
   name: "TheButton",
-  components: {
-    ThePlus,
-  },
+  props: {
+    rounded: {
+      type: Boolean,
+      default: false,
+    },
+  }
 }
 </script>
 
 <style scoped lang="scss">
-
 .the-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   padding: 10px 20px;
+  width: 150px;
   background: green;
   color: white;
   border: none;
-  border-radius: 20px;
-  display: flex;
+  border-radius: 5px;
   gap: 5px;
-  align-items: center;
   fill: white;
   cursor: pointer;
+
+  &__rounded {
+    border-radius: 20px;
+  }
 }
 </style>

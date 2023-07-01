@@ -12,3 +12,16 @@ export default {
   }
 }
 </script>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  padding: 40px;
+  background: #F2F2F2;
+  height: 100vh;
+}
+</style>

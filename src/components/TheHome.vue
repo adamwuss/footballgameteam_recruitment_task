@@ -1,14 +1,23 @@
 <template>
  <div class="the-home">
-   <div class="the-home__header">
-     <TheSearch @search="handleSearch" />
-     <TheButton @click="handleIntern" />
+   <div v-if="!isAddingIntern">
+     <div class="the-home__header">
+       <TheSearch @search="handleSearch" />
+       <TheButton @click="isAddingIntern = true" rounded>
+         <ThePlus />
+         Add User
+       </TheButton>
+     </div>
+     <TheTable
+         :interns="filteredInterns"
+         :numberOfPages="numberOfPages"
+         :callbackClick="callbackClick"
+         :isLoading="isLoading"
+     />
    </div>
-   <TheTable
-     :interns="filteredInterns"
-     :numberOfPages="numberOfPages"
-     :callbackClick="callbackClick"
-     :isLoading="isLoading"
+   <TheIntern
+     v-else
+     @close="isAddingIntern = false"
    />
  </div>
 </template>
@@ -17,19 +26,24 @@
 import TheTable from '@/components/TheTable.vue'
 import TheSearch from '@/components/TheSearch.vue';
 import TheButton from '@/components/TheButton.vue';
+import TheIntern from "@/components/TheIntern.vue";
 import { getInterns } from '@/api/getInterns';
+import ThePlus from "@/components/icons/ThePlus.vue";
 export default {
   name: 'TheHome',
   components: {
+    ThePlus,
     TheTable,
     TheSearch,
     TheButton,
+    TheIntern,
   },
   data: () => ({
     interns: [],
     numberOfPages: 1,
     search: '',
     isLoading: false,
+    isAddingIntern: false,
   }),
   async mounted() {
     await this.callbackClick();
@@ -47,7 +61,6 @@ export default {
 
       this.isLoading = false;
     },
-    handleIntern() {},
   },
   computed: {
     filteredInterns() {
@@ -60,7 +73,9 @@ export default {
 
 <style scoped lang="scss">
 .the-home {
-  padding: 20px;
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
 
   &__header {
     display: flex;
