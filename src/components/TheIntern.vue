@@ -60,6 +60,12 @@ export default {
       avatar: this.editingIntern.avatar || '',
     };
   },
+  mounted() {
+    window.addEventListener('keyup', this.handleKey)
+  },
+  beforeUnmount() {
+    window.removeEventListener('keyup', this.handleKey)
+  },
   methods: {
     validateFirstName() {
       if (!this.firstName) {
@@ -119,6 +125,15 @@ export default {
         id: this.editingIntern.id || Date.now(),
       });
     },
+    handleKey(event) {
+      if (event.key === 'Escape') {
+        this.$emit('cancel')
+      }
+
+      else if (event.key === 'Enter') {
+        this.handleClick()
+      }
+    }
   },
 }
 </script>
