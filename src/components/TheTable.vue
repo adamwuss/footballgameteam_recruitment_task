@@ -118,6 +118,7 @@ export default {
   flex-direction: column;
   justify-content: space-between;
   border-top: 1px solid #f5f5f5;
+  gap: 10px;
 
   &__wrapper {
     margin-bottom: 30px;
