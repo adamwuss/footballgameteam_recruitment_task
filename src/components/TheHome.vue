@@ -19,6 +19,7 @@
      v-else
      :editingIntern="editingIntern"
      @close="handleAddIntern"
+     @cancel="isHandlingIntern = false"
    />
  </div>
 </template>

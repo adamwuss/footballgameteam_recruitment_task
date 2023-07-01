@@ -2,6 +2,7 @@
   <button
     class="the-button"
     :class="{'the-button__rounded': rounded}"
+    :style="{backgroundColor: color}"
   >
     <slot />
   </button>
@@ -15,6 +16,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    color: {
+      type: String,
+      default: "green",
+    },
   }
 }
 </script>
@@ -26,7 +31,6 @@ export default {
   align-items: center;
   padding: 10px 20px;
   width: 150px;
-  background: green;
   color: white;
   border: none;
   border-radius: 5px;

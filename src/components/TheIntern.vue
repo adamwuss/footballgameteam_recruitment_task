@@ -14,9 +14,14 @@
         </label>
       </div>
 
-      <TheButton @click="handleClick">
-        {{ editingIntern ? 'Update Details' : 'Add User' }}
-      </TheButton>
+      <div class="the-intern__buttons">
+        <TheButton @click="$emit('cancel')" color="red">
+          Cancel
+        </TheButton>
+        <TheButton @click="handleClick">
+          {{ editingIntern ? 'Update Details' : 'Add User' }}
+        </TheButton>
+      </div>
     </div>
 
     <div class="the-intern__photo">
@@ -195,6 +200,11 @@ export default {
     input {
       display: none;
     }
+  }
+
+  &__buttons {
+    display: flex;
+    gap: 10px;
   }
 }
 </style>
