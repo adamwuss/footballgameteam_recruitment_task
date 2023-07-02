@@ -59,12 +59,14 @@ export default {
       this.isLoading = true;
 
       const data = await getInterns()
-      this.interns = data.data;
-      this.totalPages = data.total_pages;
+      if (data) {
+        this.interns = data.data;
+        this.totalPages = data.total_pages;
 
-      for (let i = 2; i <= this.totalPages; i++) {
-        const data = await getInterns(String(i));
-        this.interns = [...this.interns, ...data.data];
+        for (let i = 2; i <= this.totalPages; i++) {
+          const data = await getInterns(String(i));
+          this.interns = [...this.interns, ...data.data];
+        }
       }
 
       this.isLoading = false;
