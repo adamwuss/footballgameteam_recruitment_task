@@ -17,11 +17,15 @@ export default {
 * {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-  padding: 40px;
   background: #F2F2F2;
   height: 100vh;
+
+  @media screen and (min-width: 480px) {
+    padding: 40px;
+  }
 }
 </style>

@@ -142,19 +142,33 @@ export default {
 .the-intern {
   display: flex;
   justify-content: space-between;
-  height: 300px;
+  flex-direction: column;
+
   padding-top: 50px;
+  width: 100%;
+
+  @media screen and (min-width: 1024px) {
+    height: 300px;
+    flex-direction: row;
+  }
 
   &__inputs-wrapper {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    margin-bottom: 30px;
   }
 
   &__inputs {
     display: flex;
+    flex-direction: column;
     gap: 30px;
     margin-bottom: 30px;
+
+    @media screen and (min-width: 1024px) {
+      flex-direction: row;
+      width: 400px;
+    }
   }
 
   &__label {
@@ -168,8 +182,12 @@ export default {
   }
 
   &__input {
-    width: 400px;
+    width: 100%;
     height: 25px;
+
+    @media screen and (min-width: 480px) {
+      width: 300px;
+    }
   }
 
   &__error {
@@ -188,8 +206,13 @@ export default {
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    width: 400px;
+    width: 100%;
     padding: 20px;
+    gap: 20px;
+
+    @media screen and (min-width: 480px) {
+      width: 400px;
+    }
 
     img {
       border-radius: 50%;
@@ -220,6 +243,12 @@ export default {
   &__buttons {
     display: flex;
     gap: 10px;
+    width: 100%;
+    justify-content: space-between;
+
+    @media screen and (min-width: 480px) {
+      justify-content: start;
+    }
   }
 }
 </style>

@@ -21,13 +21,17 @@ export default {
   .the-search {
     height: 30px;
     border: none;
-    width: 350px;
+    width: 50%;
     text-indent: 5px;
     color: #2a2a2a;
     background-color: #F2F2F2;
     background-image: url(@/assets/img/search-icon.svg);
     background-repeat: no-repeat;
     background-position: right 10px center;
+
+    @media screen and (min-width: 1024px) {
+      width: 350px;
+    }
   }
 
   ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */

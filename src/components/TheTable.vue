@@ -119,10 +119,16 @@ export default {
   justify-content: space-between;
   border-top: 1px solid #f5f5f5;
   gap: 10px;
+  height: 100%;
 
   &__wrapper {
     margin-bottom: 30px;
     height: 400px;
+
+    @media screen and (min-width: 480px) {
+      margin-bottom: 30px;
+      height: 400px;
+    }
   }
 
   &__table {

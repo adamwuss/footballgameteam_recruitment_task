@@ -108,6 +108,7 @@ export default {
   padding: 30px;
   border-radius: 10px;
   box-shadow: 0 0 25px 0 lightgrey;
+  height: 100%;
 
   &__header {
     display: flex;
